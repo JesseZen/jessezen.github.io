@@ -947,74 +947,20 @@
         </header>
         <div class="projects reveal" data-github="repos:list">
 
-          <a class="project" href="#" >
+          <a class="project" href="#" data-repo-template data-field="url">
             <div class="project-head">
-              <span class="project-name">spring-cloud-gateway-pro</span>
-              <span class="project-lang">Java</span>
+              <span class="project-name" data-field="name">spring-cloud-gateway-pro</span>
+              <span class="project-lang" data-field="lang">Java</span>
             </div>
-            <p class="project-desc">Production-ready API gateway with rate limiting &amp; auth.</p>
+            <p class="project-desc" data-field="desc">Production-ready API gateway with rate limiting &amp; auth.</p>
             <div class="project-meta">
               <span class="m">
                 <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M8 1.5l2 4.5 5 .4-3.8 3.3 1.2 4.9L8 12l-4.4 2.6 1.2-4.9L1 6.4l5-.4z" stroke-linejoin="round"/></svg>
-                128
+                <span data-field="stars">128</span>
               </span>
               <span class="m">
                 <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="4" cy="3" r="1.4"/><circle cx="12" cy="3" r="1.4"/><circle cx="8" cy="13" r="1.4"/><path d="M4 4.4v2c0 1.5 4 2.5 4 4.6M12 4.4v2c0 1.5-4 2.5-4 4.6"/></svg>
-                34
-              </span>
-            </div>
-          </a>
-
-          <a class="project" href="#">
-            <div class="project-head">
-              <span class="project-name">distributed-task-scheduler</span>
-              <span class="project-lang">Java</span>
-            </div>
-            <p class="project-desc">Fault-tolerant distributed task scheduling framework.</p>
-            <div class="project-meta">
-              <span class="m">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M8 1.5l2 4.5 5 .4-3.8 3.3 1.2 4.9L8 12l-4.4 2.6 1.2-4.9L1 6.4l5-.4z" stroke-linejoin="round"/></svg>
-                87
-              </span>
-              <span class="m">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="4" cy="3" r="1.4"/><circle cx="12" cy="3" r="1.4"/><circle cx="8" cy="13" r="1.4"/><path d="M4 4.4v2c0 1.5 4 2.5 4 4.6M12 4.4v2c0 1.5-4 2.5-4 4.6"/></svg>
-                21
-              </span>
-            </div>
-          </a>
-
-          <a class="project" href="#">
-            <div class="project-head">
-              <span class="project-name">redis-cache-toolkit</span>
-              <span class="project-lang">Java</span>
-            </div>
-            <p class="project-desc">Smart caching utilities with Redis &amp; Spring integration.</p>
-            <div class="project-meta">
-              <span class="m">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M8 1.5l2 4.5 5 .4-3.8 3.3 1.2 4.9L8 12l-4.4 2.6 1.2-4.9L1 6.4l5-.4z" stroke-linejoin="round"/></svg>
-                54
-              </span>
-              <span class="m">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="4" cy="3" r="1.4"/><circle cx="12" cy="3" r="1.4"/><circle cx="8" cy="13" r="1.4"/><path d="M4 4.4v2c0 1.5 4 2.5 4 4.6M12 4.4v2c0 1.5-4 2.5-4 4.6"/></svg>
-                12
-              </span>
-            </div>
-          </a>
-
-          <a class="project" href="#">
-            <div class="project-head">
-              <span class="project-name">leetcode-java-solutions</span>
-              <span class="project-lang">Java</span>
-            </div>
-            <p class="project-desc">300+ LeetCode solutions with detailed explanations.</p>
-            <div class="project-meta">
-              <span class="m">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M8 1.5l2 4.5 5 .4-3.8 3.3 1.2 4.9L8 12l-4.4 2.6 1.2-4.9L1 6.4l5-.4z" stroke-linejoin="round"/></svg>
-                43
-              </span>
-              <span class="m">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="4" cy="3" r="1.4"/><circle cx="12" cy="3" r="1.4"/><circle cx="8" cy="13" r="1.4"/><path d="M4 4.4v2c0 1.5 4 2.5 4 4.6M12 4.4v2c0 1.5-4 2.5-4 4.6"/></svg>
-                67
+                <span data-field="forks">34</span>
               </span>
             </div>
           </a>
@@ -1035,44 +981,14 @@
         </header>
         <div class="posts" data-github="blog:list">
 
-          <a class="post reveal" href="#">
+          <a class="post reveal" href="#" data-blog-template data-field="url">
             <div class="post-meta">
-              <span>2024 · 03 · 15</span>
-              <span>8 min read</span>
-              <span class="post-tag">Spring Boot</span>
+              <span data-field="date">2024 · 03 · 15</span>
+              <span><span data-field="readtime">8 min</span> read</span>
+              <span class="post-tag" data-field="category">Spring Boot</span>
             </div>
-            <h3 class="post-title">深入理解 Spring Boot 3 的自动配置机制</h3>
-            <p class="post-excerpt">自动配置是 Spring Boot 的灵魂所在。从 @EnableAutoConfiguration 出发，一路追踪 SPI 机制与条件装配的精妙设计，看清框架如何以约定胜过配置。</p>
-          </a>
-
-          <a class="post reveal" href="#">
-            <div class="post-meta">
-              <span>2024 · 02 · 28</span>
-              <span>12 min read</span>
-              <span class="post-tag">Redis</span>
-            </div>
-            <h3 class="post-title">Redis 分布式锁的几种实现方式对比</h3>
-            <p class="post-excerpt">从 SETNX 到 Redlock，分布式锁的实现各有取舍。本文对比五种方案，剖析其正确性与性能边界，并给出选型建议。</p>
-          </a>
-
-          <a class="post reveal" href="#">
-            <div class="post-meta">
-              <span>2024 · 02 · 10</span>
-              <span>15 min read</span>
-              <span class="post-tag">Microservices</span>
-            </div>
-            <h3 class="post-title">从零搭建高可用微服务架构</h3>
-            <p class="post-excerpt">微服务并非银弹，但合理的拆分与治理能让系统从容应对规模增长。一份从零开始的实战指南，涵盖注册、网关、熔断与链路追踪。</p>
-          </a>
-
-          <a class="post reveal" href="#">
-            <div class="post-meta">
-              <span>2024 · 01 · 20</span>
-              <span>10 min read</span>
-              <span class="post-tag">JVM</span>
-            </div>
-            <h3 class="post-title">JVM 调优实战：GC 日志分析指南</h3>
-            <p class="post-excerpt">GC 日志是 JVM 的脉搏。学会读懂它，便能在吞吐与延迟之间找到属于你的平衡点，让每一次停顿都心中有数。</p>
+            <h3 class="post-title" data-field="title">深入理解 Spring Boot 3 的自动配置机制</h3>
+            <p class="post-excerpt" data-field="excerpt">自动配置是 Spring Boot 的灵魂所在。从 @EnableAutoConfiguration 出发，一路追踪 SPI 机制与条件装配的精妙设计，看清框架如何以约定胜过配置。</p>
           </a>
 
         </div>
@@ -1091,31 +1007,10 @@
         </header>
         <div class="timeline reveal" data-github="activity:list">
 
-          <div class="event">
-            <p class="event-time">2h ago</p>
-            <p class="event-body">Pushed to <span class="repo">spring-cloud-gateway-pro</span>
-              <span class="commit">feat: add Redis caching layer to user service</span>
-            </p>
-          </div>
-
-          <div class="event">
-            <p class="event-time">1d ago</p>
-            <p class="event-body">PR merged in <span class="repo">distributed-task-scheduler</span>
-              <span class="commit">refactor: migrate payment module to Spring Boot 3</span>
-            </p>
-          </div>
-
-          <div class="event">
-            <p class="event-time">3d ago</p>
-            <p class="event-body">Released <span class="repo">redis-cache-toolkit v2.1.0</span>
-              <span class="commit">Added smart invalidation and Lua scripting support</span>
-            </p>
-          </div>
-
-          <div class="event">
-            <p class="event-time">5d ago</p>
-            <p class="event-body">Fixed critical bug in <span class="repo">payment-service</span>
-              <span class="commit">resolve distributed lock race condition</span>
+          <div class="event" data-activity-template>
+            <p class="event-time" data-field="time">2h ago</p>
+            <p class="event-body"><span data-field="action">Pushed to spring-cloud-gateway-pro</span>
+              <span class="commit" data-field="desc">feat: add Redis caching layer to user service</span>
             </p>
           </div>
 

@@ -185,37 +185,115 @@ const GitHubAPI = (function () {
     set("name", profile.name || profile.login || SITE_CONFIG.name);
   }
 
+  /* ---------- 通用克隆填充 ---------- */
+  // 事件类型 → terminal-geek 的 commit 类型标签与 class
+  const ACTIVITY_TYPE_MAP = {
+    PushEvent: ["feat:", "type-feat"],
+    PullRequestEvent: ["refactor:", "type-refactor"],
+    ReleaseEvent: ["release:", "type-release"],
+    IssuesEvent: ["fix:", "type-fix"],
+    CreateEvent: ["chore:", "type-feat"],
+    ForkEvent: ["fork:", "type-feat"],
+  };
+
+  function cloneAndFill(templateEl, data, index) {
+    const clone = templateEl.cloneNode(true);
+    clone.removeAttribute("data-repo-template");
+    clone.removeAttribute("data-activity-template");
+    clone.removeAttribute("data-blog-template");
+    clone.removeAttribute("data-color-cycle");
+    // 移除 reveal 动画类，避免动态插入的卡片因未被 IntersectionObserver 观察而隐藏
+    clone.classList.remove("reveal");
+
+    // 颜色循环修饰类
+    const cycle = templateEl.getAttribute("data-color-cycle");
+    if (cycle) {
+      const classes = cycle.split(",").map((s) => s.trim()).filter(Boolean);
+      classes.forEach((c) => clone.classList.remove(c));
+      if (classes.length) clone.classList.add(classes[index % classes.length]);
+    }
+
+    // 按 data-field 填充
+    clone.querySelectorAll("[data-field]").forEach((el) => {
+      const field = el.getAttribute("data-field");
+      if (field === "url") {
+        const link = el.closest("a");
+        if (link && data.url) link.setAttribute("href", data.url);
+        return;
+      }
+      if (field === "index") {
+        el.textContent = String(index + 1).padStart(2, "0");
+        return;
+      }
+      if (field === "type") {
+        const pair = ACTIVITY_TYPE_MAP[data.type] || ["feat:", "type-feat"];
+        el.textContent = pair[0];
+        el.classList.add(pair[1]);
+        return;
+      }
+      if (field === "hash") {
+        el.textContent = Math.random().toString(16).slice(2, 9);
+        return;
+      }
+      if (data[field] !== undefined && data[field] !== null) {
+        el.textContent = data[field];
+      }
+    });
+
+    return clone;
+  }
+
+  function repoData(repo) {
+    return {
+      name: repo.name || repo.full_name || "",
+      desc: repo.description || "",
+      lang: repo.language || "Java",
+      stars: repo.stargazers_count ?? repo.stars ?? 0,
+      forks: repo.forks_count ?? repo.forks ?? 0,
+      url: repo.html_url || repo.url || "#",
+    };
+  }
+
   function fillRepos(repos) {
     const containers = document.querySelectorAll('[data-github="repos:list"]');
     if (!containers.length) return;
 
     const list = (repos || FALLBACK.repos).slice(0, 6);
     containers.forEach((container) => {
-      // 保留容器自身样式，清空子项
       const template = container.querySelector("[data-repo-template]");
-      if (template) template.remove();
+      if (!template) return;
+      const templateClone = template.cloneNode(true);
 
-      list.forEach((repo) => {
-        const card = document.createElement("div");
-        card.className = "gh-repo-card";
-        card.setAttribute("data-repo", "");
-        const name = repo.name || repo.full_name || "";
-        const desc = repo.description || "";
-        const stars = repo.stargazers_count ?? repo.stars ?? 0;
-        const forks = repo.forks_count ?? repo.forks ?? 0;
-        const lang = repo.language || "Java";
-        const url = repo.html_url || repo.url || "#";
-        card.innerHTML = `
-          <a href="${url}" target="_blank" rel="noopener" class="gh-repo-name">${name}</a>
-          <p class="gh-repo-desc">${desc}</p>
-          <div class="gh-repo-meta">
-            <span class="gh-repo-lang"><span class="gh-lang-dot"></span>${lang}</span>
-            <span class="gh-repo-stars">★ ${stars}</span>
-            <span class="gh-repo-forks">⑂ ${forks}</span>
-          </div>
-        `;
-        container.appendChild(card);
-      });
+      if (container.getAttribute("data-fill-mode") === "json") {
+        // terminal-geek: <pre class="json"> 内重建 JSON 文本块
+        container.innerHTML = "";
+        const mkPunc = (t) => {
+          const s = document.createElement("span");
+          s.className = "punc";
+          s.textContent = t;
+          return s;
+        };
+        container.appendChild(mkPunc("["));
+        container.appendChild(document.createTextNode("\n  "));
+        list.forEach((repo, i) => {
+          const node = cloneAndFill(templateClone, repoData(repo), i);
+          container.appendChild(node);
+          if (i < list.length - 1) {
+            container.appendChild(mkPunc(","));
+            container.appendChild(document.createTextNode("\n  "));
+          } else {
+            container.appendChild(document.createTextNode("\n"));
+          }
+        });
+        container.appendChild(mkPunc("]"));
+      } else {
+        // 常规卡片克隆：保留模板的兄弟节点（如 section header），仅替换模板自身
+        const parent = template.parentNode;
+        template.remove();
+        list.forEach((repo, i) => {
+          parent.appendChild(cloneAndFill(templateClone, repoData(repo), i));
+        });
+      }
       container.classList.add("gh-loaded");
     });
   }
@@ -227,22 +305,20 @@ const GitHubAPI = (function () {
     const list = activity || FALLBACK.activity;
     containers.forEach((container) => {
       const template = container.querySelector("[data-activity-template]");
-      if (template) template.remove();
+      if (!template) return;
+      const templateClone = template.cloneNode(true);
+      const parent = template.parentNode;
+      template.remove();
 
-      list.forEach((item) => {
-        const el = document.createElement("div");
-        el.className = "gh-activity-item";
-        el.setAttribute("data-activity", "");
-        el.style.setProperty("--gh-color", item.color || "#64748b");
-        el.innerHTML = `
-          <div class="gh-activity-dot"></div>
-          <div class="gh-activity-body">
-            <div class="gh-activity-action">${item.action}</div>
-            <div class="gh-activity-desc">${item.desc}</div>
-            <div class="gh-activity-time">${item.time}</div>
-          </div>
-        `;
-        container.appendChild(el);
+      list.forEach((item, i) => {
+        const data = {
+          type: item.type,
+          action: item.action || "",
+          desc: item.desc || "",
+          time: item.time || "",
+          repo: item.repo || "",
+        };
+        parent.appendChild(cloneAndFill(templateClone, data, i));
       });
       container.classList.add("gh-loaded");
     });
@@ -255,24 +331,21 @@ const GitHubAPI = (function () {
 
     containers.forEach((container) => {
       const template = container.querySelector("[data-blog-template]");
-      if (template) template.remove();
+      if (!template) return;
+      const templateClone = template.cloneNode(true);
+      const parent = template.parentNode;
+      template.remove();
 
-      posts.forEach((post) => {
-        const el = document.createElement("article");
-        el.className = "gh-blog-card";
-        el.setAttribute("data-blog", "");
-        if (post.placeholder) el.setAttribute("data-placeholder", "");
-        el.innerHTML = `
-          <div class="gh-blog-meta">
-            <span class="gh-blog-date">${post.date}</span>
-            <span class="gh-blog-time">${post.readTime}</span>
-            <span class="gh-blog-cat">${post.category}</span>
-          </div>
-          <h3 class="gh-blog-title">${post.title}</h3>
-          <p class="gh-blog-excerpt">${post.excerpt}</p>
-          <a href="${post.url}" class="gh-blog-link">${post.placeholder ? "待撰写" : "阅读全文"} →</a>
-        `;
-        container.appendChild(el);
+      posts.forEach((post, i) => {
+        const data = {
+          title: post.title || "",
+          excerpt: post.excerpt || "",
+          date: post.date || "",
+          readtime: post.readTime || "",
+          category: post.category || "",
+          url: post.url || "#",
+        };
+        parent.appendChild(cloneAndFill(templateClone, data, i));
       });
       container.classList.add("gh-loaded");
     });
